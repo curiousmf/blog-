@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: gray;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="block">
+        <form method="post">
+            {% csrf_token %}
+            <p>Sure?</p>
+            {{ form.as_p }}
+            <input type="submit" value="submit">
+            <p>
+                <a href="{% url 'start' %}">Cancel</a>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>

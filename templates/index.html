@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        nav {
+            height: 70px;
+            background-color: black;
+            text-align: center;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .thea {
+            color: white;
+
+        }
+
+        .thea:hover {
+            color: blue;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        a:hover {
+            color: white;
+        }
+
+        p {
+            color: black;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+        }
+
+        button {
+            margin: 7px;
+        }
+    </style>
+</head>
+
+<body style="background-color: gray;">
+    <nav>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'logout' %}" class="thea">Logout</a></p>
+        <p><a href="{% url 'add_blog'%}" class="thea">Add Blog</a></p>
+        <p><a href="{% url 'reset'%}" class="thea">Reset Password</a></p>
+        <p><a href="{% url 'change'%}" class="thea">Change Password</a></p>
+        {% else %}
+        <p><a href="{% url 'registration' %}" class="thea">Register</a></p>
+        <p><a href="{% url 'login' %}" class="thea">Login</a></p>
+        {% endif %}
+    </nav>
+    {% if user.is_authenticated %}
+    <h1>Loged in: {{user.username}}</h1>
+    {% endif %}
+
+    {% for blog in blogs %}
+    <div style="margin: 0 auto;
+            margin-top: 10px;
+            width: 300px;
+            max-height: 900px;
+            border: 2px solid blue;
+            border-radius: 3px;
+            background-color: aqua;
+            text-align: center;
+            margin-bottom: 20px;">
+        <p>Created by: {{ blog.author }}</p>
+        <p><a href="{{ blog.get_absolute_url }}">Blog_detail</a></p>
+        {% if user.username == "admin" %}
+        <p><a href="{% url 'update' blog.slug %}">Edit</a></p>
+        <p><a href="{% url 'delete' blog.slug %}">Delete</a></p>
+        {% endif %}
+        {% if user.username == blog.author %}
+        <p><a href="{% url 'update' blog.slug %}">Edit</a></p>
+        <p><a href="{% url 'delete' blog.slug %}">Delete</a></p>
+        {% endif %}
+        <p>{{ blog.likes }}</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <button name="like" type="submit" value="{{ blog.pk }}">Like</button>
+        </form>
+    </div>
+    {% endfor %}
+
+
+
+</body>
+
+</html>
